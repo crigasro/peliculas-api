@@ -25,8 +25,6 @@ app.get("/search", (req, res) => {
     })
 })
 
-// https://api.themoviedb.org/3/movie/238?api_key=a77a82731d5e0ca856b91fc59c6479ce
-
 // Handle request for a detail of a movie given its id
 app.get("/getById", (req, res) => {
     let query = req.query;
@@ -47,14 +45,14 @@ app.get("/getById", (req, res) => {
     .then((movie) => {
         switch(movie_detail){
             case "title": 
-                res.write(JSON.stringify(movie.data.original_title, null, 2));
+                res.write(movie.data.original_title, null, 2);
                 break;
             case "description":
-                res.write(JSON.stringify(movie.data.overview, null, 2));
+                res.write(movie.data.overview, null, 2);
                 break;
             case "poster": 
                 let poster_path = "http://image.tmdb.org/t/p/w185" + movie.data.poster_path
-                res.write(JSON.stringify(poster_path, null, 2));
+                res.write(poster_path, null, 2);
                 break;
             case "cast":
                 res.write(JSON.stringify(movie.data.cast, null, 2));

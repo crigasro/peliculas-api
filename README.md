@@ -8,5 +8,6 @@ También podrá buscar un detalle de una película dado su ID haciendo peticione
 * `&detail=title` devuelve el título de la película.
 * `&detail=description` devuelve la descripción de la película.
 * `&detail=cast` devuelve el listado de actores de la película.
-* `&detail=img` devuelve la URL de la imagen de la película.
+* `&detail=poster` devuelve la URL de la imagen de la película.
+Ejemplo: `http://localhost:8080/getById?id=1893&detail=cast`
 
