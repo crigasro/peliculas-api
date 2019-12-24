@@ -1,0 +1,9 @@
+version: '3'
+services:
+  peliculas-api:
+    build: .
+    ports:
+    - "8080:8080"
+    volumes:
+    - ./src/app.js:/peliculas/src/app.js
+    - ./config/config.js:/peliculas/config/config.js

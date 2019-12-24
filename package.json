@@ -1,0 +1,23 @@
+{
+  "name": "peliculas-api",
+  "version": "1.0.0",
+  "description": "API para consultar peliculas",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crigasro/peliculas-api.git"
+  },
+  "author": "Cristina Gaspar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crigasro/peliculas-api/issues"
+  },
+  "homepage": "https://github.com/crigasro/peliculas-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
