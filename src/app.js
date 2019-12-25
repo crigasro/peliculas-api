@@ -22,29 +22,30 @@ app.post('/login', (req, res) => {
 
 // Handle request for a list of movies given a search chain 
 app.get("/search", verifyToken, (req, res) => {
-    let query = req.query;
-    let mbd_url = BASE_URL + "search/movie?api_key=" + API_KEY + "&query=" + query.chain;
-
-    if(query.chain == "" || query.chain == undefined) {
-        res.end("You need to write something for chain parameter");
-    } else {
-        axios.get(mbd_url)
-        .then((movies) => {
-            let results = movies.data.results;
-            res.setHeader('Content-Type', 'application/json');
-            let json_res = JSON.stringify(results);
-            res.end(json_res, null, 2);
-        })
-        .catch((err) => {
-            console.log("An error ocurred while requesting /search:\n", err);
-            res.end("Error while requesting to The Movie DB");
-        })
-    }
+    jwt.verify(req.token, "secretkey", (err, data) => {
+        let query = req.query;
+        let mbd_url = BASE_URL + "search/movie?api_key=" + API_KEY + "&query=" + query.chain;
+    
+        if(query.chain == "" || typeof query.chain == "undefined") {
+            res.end("You need to write something for chain parameter");
+        } else {
+            axios.get(mbd_url)
+            .then((movies) => {
+                let results = movies.data.results;
+                res.setHeader('Content-Type', 'application/json');
+                let json_res = JSON.stringify(results);
+                res.end(json_res, null, 2);
+            })
+            .catch((err) => {
+                console.log("An error ocurred while requesting /search:\n", err);
+                res.end("Error while requesting to The Movie DB");
+            })
+        }
+    })
 })
 
 // Handle request for a detail of a movie given its id
 app.get("/getById", verifyToken, (req, res) => {
-
     jwt.verify(req.token, "secretkey", (err, data) => {
         if(err) {
             res.sendStatus(403);
@@ -55,7 +56,7 @@ app.get("/getById", verifyToken, (req, res) => {
             console.log("Req query id: ", movie_id);
             console.log("Req query detail: ", movie_detail);
             
-            if(movie_detail == "" || movie_detail == undefined) {
+            if(movie_detail == "" || typeof movie_detail == "undefined") {
                 res.end("You need to write something for detail parameter");
             }
         
