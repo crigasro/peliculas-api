@@ -8,6 +8,19 @@ const BASE_URL = config.baseURL;
 
 let app = express();
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requetested-With, Content-type, Accept, Authorization"
+    );
+    
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Methods', 'POST, GET');
+        return res.status(200).json({});
+    }
+});
+
 // Login will be mocked
 app.post('/login', (req, res) => {
     const mockUser = {
@@ -23,23 +36,27 @@ app.post('/login', (req, res) => {
 // Handle request for a list of movies given a search chain 
 app.get("/search", verifyToken, (req, res) => {
     jwt.verify(req.token, "secretkey", (err, data) => {
-        let query = req.query;
-        let mbd_url = BASE_URL + "search/movie?api_key=" + API_KEY + "&query=" + query.chain;
-    
-        if(query.chain == "" || typeof query.chain == "undefined") {
-            res.end("You need to write something for chain parameter");
+        if(err) {
+            res.sendStatus(401);
         } else {
-            axios.get(mbd_url)
-            .then((movies) => {
-                let results = movies.data.results;
-                res.setHeader('Content-Type', 'application/json');
-                let json_res = JSON.stringify(results);
-                res.end(json_res, null, 2);
-            })
-            .catch((err) => {
-                console.log("An error ocurred while requesting /search:\n", err);
-                res.end("Error while requesting to The Movie DB");
-            })
+            let query = req.query;
+            let mbd_url = BASE_URL + "search/movie?api_key=" + API_KEY + "&query=" + query.chain;
+        
+            if(query.chain == "" || typeof query.chain == "undefined") {
+                res.end("You need to write something for chain parameter");
+            } else {
+                axios.get(mbd_url)
+                .then((movies) => {
+                    let results = movies.data.results;
+                    res.setHeader('Content-Type', 'application/json');
+                    let json_res = JSON.stringify(results);
+                    res.end(json_res, null, 2);
+                })
+                .catch((err) => {
+                    console.log("An error ocurred while requesting /search:\n", err);
+                    res.end("Error while requesting to The Movie DB");
+                })
+            }
         }
     })
 })
@@ -48,7 +65,7 @@ app.get("/search", verifyToken, (req, res) => {
 app.get("/getById", verifyToken, (req, res) => {
     jwt.verify(req.token, "secretkey", (err, data) => {
         if(err) {
-            res.sendStatus(403);
+            res.sendStatus(401);
         } else {
             let query = req.query;
             let movie_id = query.id;
