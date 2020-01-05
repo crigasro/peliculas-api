@@ -13,12 +13,9 @@ app.use((req, res, next) => {
     res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requetested-With, Content-type, Accept, Authorization"
-    );
-    
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'POST, GET');
-        return res.status(200).json({});
-    }
+    );    
+    res.header('Access-Control-Allow-Methods', 'POST, GET');
+    next();
 });
 
 // Login will be mocked
